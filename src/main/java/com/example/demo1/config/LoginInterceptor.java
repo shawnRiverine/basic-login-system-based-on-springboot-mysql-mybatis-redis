@@ -18,9 +18,10 @@ public class LoginInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) {
 
+        // 从请求头获取 token
         String token = request.getHeader("token");
 
-        // 没 token
+        // 如果没 token
         if (token == null || token.isEmpty()) {
             response.setStatus(401);
             return false;
@@ -29,7 +30,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         // ⭐ 查 Redis
         String username = redisUtil.get(token);
 
-        // 传入的 token 对应的 username 不存在（说明无效）
+        // 传入的 token 对应的 username 如果不存在（说明无效）
         if (username == null) {
             response.setStatus(401);
             return false;
