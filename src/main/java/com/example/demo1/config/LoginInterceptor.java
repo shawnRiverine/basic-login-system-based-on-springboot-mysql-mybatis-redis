@@ -28,7 +28,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         // ⭐ 查 Redis
-        String username = redisUtil.get(token);
+        String key = "token:" + token;
+        String username = redisUtil.get(key);
 
         // 传入的 token 对应的 username 如果不存在（说明无效）
         if (username == null) {

@@ -36,9 +36,10 @@ public class AuthController {
         if (result) {
             // ⭐ 生成唯一 token
             String token = UUID.randomUUID().toString();
+            String key = "token:" + token;
 
             // ⭐ 把 token 存到 Redis，设置过期时间（比如 30 分钟）
-            redisUtil.set(token, dto.getUsername(), 30);
+            redisUtil.set(key, dto.getUsername(), 30);
 
             // ⭐ 用 Map 存返回数据（非常常见写法）
             Map<String, Object> data = new HashMap<>();
