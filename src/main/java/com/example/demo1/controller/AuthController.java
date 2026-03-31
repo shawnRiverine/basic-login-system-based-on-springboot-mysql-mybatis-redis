@@ -10,9 +10,7 @@ import java.util.UUID;
 
 import com.example.demo1.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 // 表示这是一个接口类，返回JSON数据
@@ -26,6 +24,7 @@ public class AuthController {
     private RedisUtil redisUtil;
 
     @PostMapping("/login")
+    // ✅ 使用 POST：因为登录需要提交敏感数据（用户名和密码）
     public Result<Map<String, Object>> login(@RequestBody LoginDTO dto) {
 
         // 判断用户名和密码是否正确（调用 AuthService 的 login 方法）
@@ -50,5 +49,18 @@ public class AuthController {
         } else {
             return Result.error("用户名或密码错误");
         }
+    }
+
+    @GetMapping("/search/age")
+    // ✅ 使用 GET：因为只是查询用户的年龄，不修改数据
+    public Result<Integer> getAge(@RequestParam String username) {
+
+        Integer age = authService.getAge(username);
+
+        if (age == null) {
+            return Result.error("用户不存在");
+        }
+
+        return Result.success(age);
     }
 }
